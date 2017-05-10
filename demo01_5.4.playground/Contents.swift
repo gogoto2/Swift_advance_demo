@@ -2,7 +2,12 @@
 
 import UIKit
 
-var array = "========= Array ========="
+let title = "======== 內建集合类型 ========"
+
+
+
+
+let array = "========= Array ========="
 
 var fibs = [0, 1, 1, 2, 3, 5]
 fibs.append(8)
@@ -159,6 +164,7 @@ discontinued.formUnion(discontinuedIPods) // 并集
 
 extension Sequence where Iterator.Element: Hashable {
     
+    // 获取数组独特元素并保持顺序
     func unique() -> [Iterator.Element] {
         
         var seen: Set<Iterator.Element> = []
@@ -177,7 +183,23 @@ extension Sequence where Iterator.Element: Hashable {
 [1, 2, 3, 12, 1, 3, 4, 5, 6, 4, 6].unique()
 
 
+let range = "======== Range ========"
 
+let lowercaseLetters = Character("a") ... Character("z")
+
+/*:
+ * ## Range 类型
+ *                    半开范围                    闭合范围
+ * comparable          Range                   ClosedRange
+ * strideable     CountableRange           CountableClosedRange
+ * 只有 CountableRange 可以被迭代
+ */
+
+
+//
+//for char in lowercaseLetters.str {
+//    // type 'ClosedRange<Character>' does not conform to protocol 'Sequence'
+//}
 
 
 
