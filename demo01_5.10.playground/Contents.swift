@@ -116,6 +116,67 @@ exm03.next()
 // exm03 和 exm04 是封装在AnyIterator中的 exm01 的引用,,是同一个迭代器
 exm04.next()
 
+// 为队列设计协议
+protocol Queue {
+    associatedtype Element
+    
+    /// 入列
+    mutating func  enqueue(_ newElement: Element)
+    
+    /// 出列
+    mutating func dequeue() -> Element?
+}
 
+// 一个高效的 FIFO 队列
+struct FIFOQueue<Element>: Queue {
+    
+    fileprivate var left: [Element] = []
+    fileprivate var right: [Element] = []
+    
+    // O(1)
+    mutating func enqueue(_ newElement: Element){
+    
+        right.append(newElement)
+    }
+    
+    // 平摊 O(1)
+    mutating func dequeue() -> Element? {
+       
+        if left.isEmpty {
+            
+            left = right.reversed() // O(n)
+            right.removeAll()
+        }
+        
+        return left.popLast()
+    }
+}
 
+extension FIFOQueue: Collection {
+    
+    public var startIndex: Int { return 0 }
+    public var endIndex: Int { return left.count + right.count }
+    
+    public func index(after i: Int) -> Int {
+        
+        precondition(i < endIndex)
+        return i + 1
+    }
+    
+    public subscript(position: Int) -> Element {
+        
+        precondition((0 ..< endIndex).contains(position), "Index out of bounds")
+        if position < left.endIndex {
+            return left[left.count - position - 1]
+        }else{
+            return right[position - left.count]
+        }
+    }
+}
 
+extension FIFOQueue: ExpressibleByArrayLiteral {
+    
+    public init(arrayLiteral elements: Element...) {
+        self.init(left: elements.reversed(), right: [])
+    }
+}
