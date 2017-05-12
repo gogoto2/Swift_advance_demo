@@ -38,48 +38,65 @@ var chars2 = characters
 //let at1 = String(format: "%p", test1)
 //let at2 = String(format: "%p", test2)
 
-var test1 = [1, 2, 3]
+//var test1 = [1, 2, 3]
+//
+//var test2 = test1
+//
+//// 获取变量地址
+//func address(_ p: UnsafePointer<Void>) -> String {
+//    
+//    let addr = unsafeBitCast(p, to: Int.self)
+//    return String(format: "%p", addr)
+//}
+//
+//// 获取变量地址
+//func getBufferAddress<T>(_ array: [T]) -> String {
+//    
+//    return array.withUnsafeBufferPointer{ (buffer) in
+//        return String(describing: buffer.baseAddress)
+//    }
+//}
+//func getStringAddress(_ string: String) -> String {
+//    
+//    return String(format: "%p", string)
+//}
+//
+//address(test1)
+//address(test2)
+//
+//getBufferAddress(test1)
+//
+//getBufferAddress(test2)
+//
+//test2[0] = 3
+//
+//getStringAddress(str)
+//
+//
+//address(test1)
+//address(test2)
+//
+//
+//getBufferAddress(test1)
+//
+//getBufferAddress(test2)
 
-var test2 = test1
-
-// 获取变量地址
-func address(_ p: UnsafePointer<Void>) -> String {
+// 以数组第一个数为初始值的 reduce
+extension Array {
     
-    let addr = unsafeBitCast(p, to: Int.self)
-    return String(format: "%p", addr)
-}
-
-// 获取变量地址
-func getBufferAddress<T>(_ array: [T]) -> String {
-    
-    return array.withUnsafeBufferPointer{ (buffer) in
-        return String(describing: buffer.baseAddress)
+    func reduce(_ nextPartialResult: (Element, Element) -> Element) -> Element? {
+        
+        guard let fst = first else {
+            return nil
+        }
+        
+        return dropFirst().reduce(fst, nextPartialResult)
     }
 }
-func getStringAddress(_ string: String) -> String {
-    
-    return String(format: "%p", string)
-}
 
-address(test1)
-address(test2)
+let s = [1, 2, 3, 4].reduce(+)
+type(of: s)
 
-getBufferAddress(test1)
-
-getBufferAddress(test2)
-
-test2[0] = 3
-
-getStringAddress(str)
-
-
-address(test1)
-address(test2)
-
-
-getBufferAddress(test1)
-
-getBufferAddress(test2)
-
-
+let r = [Int]()
+let n = r.reduce(+)
 
