@@ -35,8 +35,8 @@ var chars2 = characters
 //let ptr02 = UnsafeMutableBufferPointer<Int>(start: &test2, count: test2.count)
 //print(ptr02.baseAddress)
 //
-//let at1 = String(format: "%p", test1)
-//let at2 = String(format: "%p", test2)
+//let at1 = String.init(format: "%p", test1)
+//let at2 = String.init(format: "%p", test2)
 
 //var test1 = [1, 2, 3]
 //
@@ -46,7 +46,7 @@ var chars2 = characters
 //func address(_ p: UnsafePointer<Void>) -> String {
 //    
 //    let addr = unsafeBitCast(p, to: Int.self)
-//    return String(format: "%p", addr)
+//    return String.init(format: "%p", addr)
 //}
 //
 //// 获取变量地址
