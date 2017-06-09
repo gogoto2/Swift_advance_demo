@@ -125,7 +125,53 @@ screen.translated(by: Point(x: 10, y: 10))
 screen
 
 
+/*:
+ * ## Copy on write
+ * 1. 集合类型都是通过这种技术实现的
+ * 2. 当自己的类型内部含有一个或多个可变引用,同时你要保持值语义,并且避免不必要的复制时, 实现写时复制是有必要的
+ */
 
+
+// isKnownUniquelyReferenced(&<#T##object: AnyObject##AnyObject#>) : 检查引用的唯一性
+// 但是对于 OC 的类,会直接返回 false
+
+// 封装任意 OC 的对象到 Swift对象中
+final class Box<T> {
+    var unbox: T
+    init(_ value: T) {
+        self.unbox = value
+    }
+}
+
+var x = Box(NSMutableData())
+isKnownUniquelyReferenced(&x)
+var y = x
+isKnownUniquelyReferenced(&x)
+
+
+
+struct Mydata {
+    private var data: Box<NSMutableData>
+    var dataForWriting: NSMutableData {
+       mutating get{
+            if !isKnownUniquelyReferenced(&data){
+                 data = Box(data.unbox.mutableCopy() as! NSMutableData)
+            }
+           return data.unbox
+        }
+    }
+    
+    init(_ data: NSData) {
+        self.data = Box(data.mutableCopy() as! NSMutableData)
+    }
+}
+
+extension Mydata {
+    
+    mutating func append(_ other: Mydata){
+        dataForWriting.append(other.data.unbox as Data)
+    }
+}
 
 
 
