@@ -50,7 +50,7 @@ window?.rootView = view!
 
 window?.onRatate = { [weak view] in
     
-    print(view)
+    print(view ?? "")
 }
 
 window = nil
